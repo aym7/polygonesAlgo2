@@ -181,4 +181,58 @@ package body Struct is
 		end if;
 	end;
 
+	procedure Noeuds_Voisins(Cible : Arbre ; Petit_Voisin, Grand_Voisin : out Arbre) is
+
+		function PetitVoisin(Cible : Arbre) return Arbre is
+			Pt : Arbre := Cible;
+			PereGaucheTrouve : Boolean := False;
+		begin
+			if Cible.all.Fils(Gauche) /= null then
+				Pt := Cible.all.Fils(Gauche);
+				While Pt.all.Fils(Droite) /= Null loop
+					Pt := Pt.all.Fils(Droite);
+				end loop;
+			else
+				While Pt /= Null and not PereGaucheTrouve loop
+					if Pt.all.Pere.all.C < Pt.all.C then
+						PereGaucheTrouve := True;
+					end if;
+					Pt := Pt.all.Pere; 
+				end loop;
+			end if;
+
+			return Pt;
+		end;
+
+		function GrandVoisin(Cible : Arbre) return Arbre is
+			Pt : Arbre := Cible;
+			PereDroiteTrouve : Boolean := False;
+		begin
+			if Cible.all.Fils(Droite) /= null then
+				Pt := Cible.all.Fils(Droite);
+				While Pt.all.Fils(Gauche) /= Null loop
+					Pt := Pt.all.Fils(Gauche);
+				end loop;
+			else
+				While Pt /= Null and not PereDroiteTrouve loop
+					if Pt.all.Pere.all.C > Pt.all.C then
+						PereDroiteTrouve := True;
+					end if;
+					Pt := Pt.all.Pere;
+				end loop;
+			end if;
+
+			return Pt;
+		end;
+
+	begin
+		Petit_Voisin := PetitVoisin(Cible);
+		Grand_Voisin := GrandVoisin(Cible);
+	end;
+
+	procedure Compte_Position(Cible : Arbre ; Nb_Petits, Nb_Grands : out Natural) is
+	begin
+		null;
+	end;
+
 end struct;
