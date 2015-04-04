@@ -236,8 +236,48 @@ package body Struct is
 	end;
 
 	procedure Compte_Position(Cible : Arbre ; Nb_Petits, Nb_Grands : out Natural) is
+
+		function NbPetits(Cible : Arbre) return Natural is
+			Compteur : Natural := 0;
+			PtCour, Mem : Arbre := Cible;
+		begin
+			if Cible.all.Fils(Gauche) /= Null then
+				Compteur := Compteur + Cible.all.Fils(Gauche).all.Compte;
+			end if;
+
+			While PtCour.all.Pere /= Null loop
+				if PtCour.all.Pere.all.Fils(Droite) /= Null and then PtCour.all.Pere.all.Fils(Droite) = Mem then
+					Compteur := Compteur + PtCour.all.Pere.all.Compte - PtCour.all.Compte;
+				end if;
+					Mem := PtCour;
+					PtCour := PtCour.all.Pere;
+			end loop;
+
+			return Compteur;
+		end;
+
+		function NbGrands(Cible : Arbre) return Natural is 
+			Compteur : Natural := 0;
+			PtCour, Mem : Arbre := Cible;
+		begin
+			if Cible.all.Fils(Droite) /= Null then
+				Compteur := Compteur + Cible.all.Fils(Droite).all.Compte;
+			end if;
+
+			While PtCour.all.Pere /= Null loop
+				if PtCour.all.Pere.all.Fils(Gauche) /= Null and then PtCour.all.Pere.all.Fils(Gauche) = Mem then
+					Compteur := Compteur + PtCour.all.Pere.all.Compte - PtCour.all.Compte;
+				end if;
+				Mem := PtCour;
+				PtCour := PtCour.all.Pere;
+			end loop;
+
+			return Compteur;
+		end;
+
 	begin
-		null;
+		Nb_Petits := NbPetits(Cible);
+		Nb_Grands := NbGrands(Cible);
 	end;
 
 end struct;
