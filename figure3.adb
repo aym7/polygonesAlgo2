@@ -7,6 +7,7 @@ use Ada.Integer_Text_IO;
 
 procedure figure3 is
 	a, b, c, d, Petit5, Grand5, Petit2, Grand2, Petit1, Grand1 : Arbre;
+	NbPetits5, NbGrands5, NbPetits2, NbGrands2, NbPetits1, NbGrands1, NbPetits6, NbGrands6 : Natural;
 begin
 	a := new noeud;
 	a.C := 5;
@@ -18,15 +19,34 @@ begin
 	b:=Rechercher(a,2);
 	c:=Rechercher(a,1);
 	d:=Rechercher(a,6);
+
+
 	Put(a.Compte);New_Line;Put(b.Compte);New_Line;Put(c.Compte);Put(d.Compte);
-	New_Line;
-	New_Line;
+
+
+	New_Line;New_Line;
 	Noeuds_Voisins(a,Petit5,Grand5);
 	Put("On obtient pour Noeuds_Voisins de 5 : ");Put(Petit5.C);Put(Grand5.C);
 	New_Line;
 	Noeuds_Voisins(b,Petit2,Grand2);
 	Put("On obtient pour Noeuds_Voisins de 2 : ");Put(Petit2.C);Put(Grand2.C);
-New_Line;
-Noeuds_Voisins(c,Petit1,Grand1);
-Put("On obtient pour Noeuds_Voisins de 1 : ");Put(Grand1.C);
+	New_Line;
+	Noeuds_Voisins(c,Petit1,Grand1);
+	Put("On obtient pour Noeuds_Voisins de 1 : ");Put("Null ");Put(Grand1.C);
+	New_Line; New_Line;
+
+
+	Compte_Position(a,NbPetits5,NbGrands5);
+	Compte_Position(b,NbPetits2,NbGrands2);
+	Compte_Position(c,NbPetits1,NbGrands1);
+	Compte_Position(d,NbPetits6,NbGrands6);
+
+	Put("On obtient pour Compte_Position de 5 : ");Put(NbPetits5);Put(NbGrands5);
+	New_Line;
+	Put("On obtient pour Compte_Position de 2 : ");Put(NbPetits2);Put(NbGrands2);
+	New_Line;
+	Put("On obtient pour Compte_Position de 1 : ");Put(NbPetits1);Put(NbGrands1);
+	New_Line;
+	Put("On obtient pour Compte_Position de 6 : ");Put(NbPetits6);Put(NbGrands6);
+
 end;

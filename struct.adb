@@ -239,18 +239,17 @@ package body Struct is
 
 		function NbPetits(Cible : Arbre) return Natural is
 			Compteur : Natural := 0;
-			PtCour, Mem : Arbre := Cible;
+			PtCour : Arbre := Cible;
 		begin
 			if Cible.all.Fils(Gauche) /= Null then
 				Compteur := Compteur + Cible.all.Fils(Gauche).all.Compte;
 			end if;
 
 			While PtCour.all.Pere /= Null loop
-				if PtCour.all.Pere.all.Fils(Droite) /= Null and then PtCour.all.Pere.all.Fils(Droite) = Mem then
+				if PtCour.all.Pere.all.Fils(Droite) /= Null and then PtCour.all.Pere.all.Fils(Droite) = PtCour then
 					Compteur := Compteur + PtCour.all.Pere.all.Compte - PtCour.all.Compte;
 				end if;
-					Mem := PtCour;
-					PtCour := PtCour.all.Pere;
+				PtCour := PtCour.all.Pere;
 			end loop;
 
 			return Compteur;
@@ -258,17 +257,16 @@ package body Struct is
 
 		function NbGrands(Cible : Arbre) return Natural is 
 			Compteur : Natural := 0;
-			PtCour, Mem : Arbre := Cible;
+			PtCour : Arbre := Cible;
 		begin
 			if Cible.all.Fils(Droite) /= Null then
 				Compteur := Compteur + Cible.all.Fils(Droite).all.Compte;
 			end if;
 
 			While PtCour.all.Pere /= Null loop
-				if PtCour.all.Pere.all.Fils(Gauche) /= Null and then PtCour.all.Pere.all.Fils(Gauche) = Mem then
+				if PtCour.all.Pere.all.Fils(Gauche) /= Null and then PtCour.all.Pere.all.Fils(Gauche) = PtCour then
 					Compteur := Compteur + PtCour.all.Pere.all.Compte - PtCour.all.Compte;
 				end if;
-				Mem := PtCour;
 				PtCour := PtCour.all.Pere;
 			end loop;
 
