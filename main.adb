@@ -24,4 +24,14 @@ begin
 	Inserer(a,5);
 	Inserer(a,4);
 	Put(a.all.Compte);
+	Inserer(a,9);
+	Inserer(a,10);
+	Inserer(a,12);
+	New_Line;
+	New_Line;
+	Put(a.all.Fils(Gauche).all.C);
+	Put(a.all.Fils(Droite).all.C);
+	New_Line;
+	Put(a.all.Fils(Gauche).all.Fils(Gauche).C);
+	Put(a.all.Fils(Droite).all.Fils(Gauche).C);
 end ;
