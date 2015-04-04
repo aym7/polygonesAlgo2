@@ -11,8 +11,8 @@ package struct is
 		Compte : Positive ;
 	end record ;
 
-	procedure inserer(a:in out arbre; e:Integer);
+	procedure inserer(a : in out arbre; e : Integer);
 	procedure supprimer(Ptracine : in out arbre ; e : Integer);
-	function rechercher (a:in arbre; e:Integer) return Arbre;
+	function rechercher (a : in arbre; e : Integer) return Arbre;
 
 end struct ;

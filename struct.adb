@@ -4,23 +4,29 @@ package body Struct is
 
 	procedure Liberer is new Ada.Unchecked_Deallocation(Noeud,Arbre) ;
 
-	procedure Inserer(a : in out Arbre ; e : Integer) is -- Compte et Pere ne sont pas gérés
-	begin
-		if a = null then
-			a := new noeud;
-			a.all.Compte := 1;
-			a.all.Fils(Gauche) := null;
-			a.all.Fils(Droite) := null;
-			a.all.C := e;
-		else
-			if e<a.all.C then
-				a.all.compte := a.all.compte + 1;
-				Inserer(a.all.Fils(gauche),e);
-			elsif e>a.all.C then
-				a.all.compte := a.all.compte + 1;
-				Inserer(a.all.Fils(droite),e);
+	procedure Inserer(a : in out Arbre ; e : Integer) is
+
+		procedure Inserermem (a : in out Arbre ; e : Integer ; Mem : Arbre) is
+		begin
+			if a = null then
+				a := new noeud;
+				a.all.Compte := 1;
+				a.all.Fils(Gauche) := null;
+				a.all.Fils(Droite) := null;
+				a.all.C := e;
+				a.all.Pere := Mem;
+			else
+				if e<a.all.C then
+					a.all.compte := a.all.compte + 1;
+					Inserermem(a.all.Fils(gauche),e, a);
+				elsif e>a.all.C then
+					a.all.compte := a.all.compte + 1;
+					Inserermem(a.all.Fils(droite),e, a);
+				end if;
 			end if;
-		end if;
+		end;
+	begin
+		Inserermem(a,e,a);
 	end;
 
 	function Rechercher (a : in Arbre ; e : Integer) return Arbre is
@@ -128,7 +134,7 @@ package body Struct is
 				PtG : Arbre := PtSuppr.all.Fils(Gauche);
 				PtD : Arbre := PtSuppr.all.Fils(Droite);
 				Max : Arbre ;
-				
+
 
 			begin
 				AugmenterComptePeres(PtSuppr);
