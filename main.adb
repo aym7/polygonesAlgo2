@@ -10,10 +10,18 @@ procedure main is
 begin
 	a := new noeud;
 	a.C := 8;
-	a.Fils(Droite) := Null;
-	a.Fils(Gauche) := Null;
+	a.Compte := 1;
+	Put(a.all.Compte);
 	Inserer(a,7);
+	Put(a.all.Compte);
 	b := Rechercher(a,7);
-	Put(b.all.C);
-	Put(b.all.Pere.all.C);
+	Inserer(a,6);
+	Put(a.all.Compte);
+	Inserer(a,11);
+	Put(a.all.Compte);
+	Inserer(a,2);
+	Put(a.all.Compte);
+	Inserer(a,5);
+	Inserer(a,4);
+	Put(a.all.Compte);
 end ;

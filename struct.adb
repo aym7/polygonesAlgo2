@@ -27,10 +27,8 @@ package body Struct is
 				IncrementerComptePeres(a);
 			else
 				if e<a.all.C then
-					a.all.compte := a.all.compte + 1;
 					Inserermem(a.all.Fils(gauche),e, a);
 				elsif e>a.all.C then
-					a.all.compte := a.all.compte + 1;
 					Inserermem(a.all.Fils(droite),e, a);
 				end if;
 			end if;
