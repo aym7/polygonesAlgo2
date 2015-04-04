@@ -41,13 +41,23 @@ package body Struct is
 		end if;
 	end;
 
-	procedure Supprimer(Ptracine : in out Arbre; e : Integer) is -- Je me suis pas occupé des Compte
+	procedure Supprimer(Ptracine : in out Arbre; e : Integer) is -- Il manque un cas dans suppr2
 		PtDel : Arbre ;
 
 		procedure suppr(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
 
+			procedure AugmenterComptePeres(PtSuppr : in Arbre) is
+				PtCour : Arbre := PtSuppr;
+			begin
+				while PtCour.all.Pere /= Null loop
+					PtCour := PtCour.all.Pere;
+					PtCour.all.Compte := PtCour.all.Compte + 1;
+				end loop;
+			end;
+
 			procedure suppr0(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
 			begin
+				AugmenterComptePeres(PtSuppr);
 				if PtSuppr.all.Pere = null then
 					Liberer(PtSuppr); --PtSuppr et Ptracine pointent ici vers la même case mémoire
 				else
@@ -62,6 +72,7 @@ package body Struct is
 			procedure suppr1G(Ptracine : in out Arbre ; PtSuppr : in out Arbre) is
 				Pt, Mem : Arbre;
 			begin
+				AugmenterComptePeres(PtSuppr);
 				if PtSuppr.all.Pere = null then --PtSuppr et Ptracine pointent ici vers la même case mémoire
 					Ptracine := Ptracine.all.Fils(Gauche);
 					Liberer(PtSuppr);
@@ -82,6 +93,7 @@ package body Struct is
 			procedure suppr1D(Ptracine : in out Arbre ; PtSuppr : in out Arbre) is
 				Pt, Mem : Arbre;
 			begin
+				AugmenterComptePeres(PtSuppr);
 				if PtSuppr.all.Pere = null then
 					Ptracine := Ptracine.all.Fils(Droite);
 					Liberer(PtSuppr);
@@ -119,6 +131,7 @@ package body Struct is
 				
 
 			begin
+				AugmenterComptePeres(PtSuppr);
 				Max := RechercheMax(PtSuppr);
 
 				if PtSuppr.all.Pere = null then
