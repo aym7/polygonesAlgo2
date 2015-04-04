@@ -7,6 +7,15 @@ package body Struct is
 	procedure Inserer(a : in out Arbre ; e : Integer) is
 
 		procedure Inserermem (a : in out Arbre ; e : Integer ; Mem : Arbre) is
+
+			procedure IncrementerComptePeres(PtSuppr : in Arbre) is
+				PtCour : Arbre := PtSuppr;
+			begin
+				while PtCour.all.Pere /= Null loop
+					PtCour := PtCour.all.Pere;
+					PtCour.all.Compte := PtCour.all.Compte + 1;
+				end loop;
+			end;
 		begin
 			if a = null then
 				a := new noeud;
@@ -15,6 +24,7 @@ package body Struct is
 				a.all.Fils(Droite) := null;
 				a.all.C := e;
 				a.all.Pere := Mem;
+				IncrementerComptePeres(a);
 			else
 				if e<a.all.C then
 					a.all.compte := a.all.compte + 1;
@@ -52,18 +62,18 @@ package body Struct is
 
 		procedure suppr(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
 
-			procedure AugmenterComptePeres(PtSuppr : in Arbre) is
+			procedure DecrementerComptePeres(PtSuppr : in Arbre) is
 				PtCour : Arbre := PtSuppr;
 			begin
 				while PtCour.all.Pere /= Null loop
 					PtCour := PtCour.all.Pere;
-					PtCour.all.Compte := PtCour.all.Compte + 1;
+					PtCour.all.Compte := PtCour.all.Compte - 1;
 				end loop;
 			end;
 
 			procedure suppr0(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
 			begin
-				AugmenterComptePeres(PtSuppr);
+				DecrementerComptePeres(PtSuppr);
 				if PtSuppr.all.Pere = null then
 					Liberer(PtSuppr); --PtSuppr et Ptracine pointent ici vers la même case mémoire
 				else
@@ -78,7 +88,7 @@ package body Struct is
 			procedure suppr1G(Ptracine : in out Arbre ; PtSuppr : in out Arbre) is
 				Pt, Mem : Arbre;
 			begin
-				AugmenterComptePeres(PtSuppr);
+				DecrementerComptePeres(PtSuppr);
 				if PtSuppr.all.Pere = null then --PtSuppr et Ptracine pointent ici vers la même case mémoire
 					Ptracine := Ptracine.all.Fils(Gauche);
 					Liberer(PtSuppr);
@@ -99,7 +109,7 @@ package body Struct is
 			procedure suppr1D(Ptracine : in out Arbre ; PtSuppr : in out Arbre) is
 				Pt, Mem : Arbre;
 			begin
-				AugmenterComptePeres(PtSuppr);
+				DecrementerComptePeres(PtSuppr);
 				if PtSuppr.all.Pere = null then
 					Ptracine := Ptracine.all.Fils(Droite);
 					Liberer(PtSuppr);
@@ -137,7 +147,7 @@ package body Struct is
 
 
 			begin
-				AugmenterComptePeres(PtSuppr);
+				DecrementerComptePeres(PtSuppr);
 				Max := RechercheMax(PtSuppr);
 
 				if PtSuppr.all.Pere = null then
