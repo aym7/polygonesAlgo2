@@ -184,7 +184,7 @@ package body Struct is
 	procedure Noeuds_Voisins(Cible : Arbre ; Petit_Voisin, Grand_Voisin : out Arbre) is
 
 		function PetitVoisin(Cible : Arbre) return Arbre is
-			Pt : Arbre := Cible;
+			Pt, Mem : Arbre := Cible;
 			PereGaucheTrouve : Boolean := False;
 		begin
 			if Cible.all.Fils(Gauche) /= null then
@@ -194,11 +194,16 @@ package body Struct is
 				end loop;
 			else
 				While Pt /= Null and not PereGaucheTrouve loop
-					if Pt.all.Pere.all.C < Pt.all.C then
+					if Pt.all.Fils(Droite) /= Null and then Pt.all.Fils(Droite).all.C = Mem.all.C then
 						PereGaucheTrouve := True;
 					end if;
+					Mem := Pt;
 					Pt := Pt.all.Pere; 
 				end loop;
+
+				if not PereGaucheTrouve then
+					Pt := Null;
+				end if;
 			end if;
 
 			return Pt;
