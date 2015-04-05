@@ -6,7 +6,7 @@ use Ada.Text_IO;
 use Ada.Integer_Text_IO;
 
 procedure figure3 is
-	a, b, c, d, Petit5, Grand5, Petit2, Grand2, Petit1, Grand1 : Arbre;
+	a, b, c, d, Petit5, Grand5, Petit2, Grand2, Petit1, Grand1, Petit6, Grand6 : Arbre;
 	NbPetits5, NbGrands5, NbPetits2, NbGrands2, NbPetits1, NbGrands1, NbPetits6, NbGrands6 : Natural;
 begin
 	a := new noeud;
@@ -32,9 +32,11 @@ begin
 	Put("On obtient pour Noeuds_Voisins de 2 : ");Put(Petit2.C);Put(Grand2.C);
 	New_Line;
 	Noeuds_Voisins(c,Petit1,Grand1);
-	Put("On obtient pour Noeuds_Voisins de 1 :  ");Put("   Null ");Put(Grand1.C);
-	New_Line; New_Line;
-
+	Put("On obtient pour Noeuds_Voisins de 1 :  ");Put("      Null");Put(Grand1.C);
+	New_Line;
+	Noeuds_Voisins(c,Petit6,Grand6);
+	Put("On obtient pour Noeuds_Voisins de 6 :  ");Put(Petit6.C);Put("      Null");
+	New_Line;
 
 	Compte_Position(a,NbPetits5,NbGrands5);
 	Compte_Position(b,NbPetits2,NbGrands2);

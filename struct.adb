@@ -141,21 +141,33 @@ package body Struct is
 				PtG : Arbre := PtSuppr.all.Fils(Gauche);
 				PtD : Arbre := PtSuppr.all.Fils(Droite);
 				Max : Arbre ;
+				Pere : Arbre := PtSuppr.all.Pere;
 
 
 			begin
 				DecrementerComptePeres(PtSuppr);
 				Max := RechercheMax(PtSuppr);
 
-				if PtSuppr.all.Pere = null then --PtSuppr et Ptracine pointent ici vers la même case mémoire
-					Suppr1G(Ptracine, Max); --Cf commentaire Suppr1G
+				Suppr1G(Ptracine, Max); --Cf commentaire Suppr1G
+
+				if Pere = null then --PtSuppr et Ptracine pointent ici vers la même case mémoire
 					Liberer(Ptracine);
-					Ptracine := Max ;
-					Max.all.Fils(Droite) := PtD;
-					Max.all.Fils(Gauche) := PtG;
-					PtD.all.Pere := Max;
-					PtG.all.Pere := Max;
+					Ptracine := Max;
+				else
+					if Pere.all.Fils(Droite) /= Null and then Pere.all.Fils(Droite) = PtSuppr then
+						Pere.all.Fils(Droite) := Max;
+					else
+						Pere.all.Fils(Gauche) := Max;
+					end if;
+
+					Max.all.Pere := Pere;
 				end if;
+
+				Max.all.Fils(Droite) := PtD;
+				Max.all.Fils(Gauche) := PtG;
+				PtD.all.Pere := Max;
+				PtG.all.Pere := Max;
+
 			end;
 
 		begin --Il faut considérer 4 cas différents (dont deux similaires)
@@ -192,8 +204,8 @@ package body Struct is
 					Pt := Pt.all.Fils(Droite);
 				end loop;
 			else
-				While Pt /= Null and not PereGaucheTrouve loop
-					if Pt.all.Fils(Droite) /= Null and then Pt.all.Fils(Droite).all.C = Mem.all.C then
+				While Pt.all.Pere /= Null and not PereGaucheTrouve loop
+					if Pt.all.Pere.all.Fils(Droite) /= Null and then Pt.all.Pere.all.Fils(Droite).all.C = Mem.all.C then
 						PereGaucheTrouve := True;
 					end if;
 					Mem := Pt;
@@ -214,8 +226,8 @@ package body Struct is
 					Pt := Pt.all.Fils(Gauche);
 				end loop;
 			else
-				While Pt /= Null and not PereDroiteTrouve loop
-					if Pt.all.Fils(Gauche) /= Null and then Pt.all.Fils(Gauche).all.C = Mem.all.C then
+				While Pt.all.Pere /= Null and not PereDroiteTrouve loop
+					if Pt.all.Pere.all.Fils(Gauche) /= Null and then Pt.all.Pere.all.Fils(Gauche).all.C = Mem.all.C then
 						PereDroiteTrouve := True;
 					end if;
 					Mem := Pt;
