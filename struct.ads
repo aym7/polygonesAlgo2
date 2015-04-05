@@ -11,10 +11,14 @@ package struct is
 		Compte : Positive ;
 	end record ;
 
-	procedure inserer(a : in out arbre; e : Integer);
-	function rechercher (a : in arbre; e : Integer) return Arbre;
-	procedure supprimer(Ptracine : in out arbre ; e : Integer);
+	procedure Inserer(Ptracine : in out arbre; Clef : Integer);
+
+	function Rechercher (Ptracine : in arbre; Clef : Integer) return Arbre;
+
+	procedure Supprimer(Ptracine : in out arbre ; Clef : Integer);
+
 	procedure Noeuds_Voisins(Cible : Arbre ; Petit_Voisin, Grand_Voisin : out Arbre);
+
 	procedure Compte_Position(Cible : Arbre ; Nb_Petits, Nb_Grands : out Natural);
 
 end struct ;

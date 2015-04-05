@@ -4,11 +4,11 @@ package body Struct is
 
 	procedure Liberer is new Ada.Unchecked_Deallocation(Noeud,Arbre) ;
 
-	procedure Inserer(a : in out Arbre ; e : Integer) is
+	procedure Inserer(Ptracine : in out Arbre ; Clef : Integer) is --Ptracine est en out au cas où c'est le pointeur null
 
-		procedure Inserermem (a : in out Arbre ; e : Integer ; Mem : Arbre) is
+		procedure Inserermem (Ptracine : in out Arbre ; Clef : Integer ; Mem : Arbre) is --Besoin de garder le père en mémoire pour le pointeur pere du noeud inséré
 
-			procedure IncrementerComptePeres(PtSuppr : in Arbre) is
+			procedure IncrementerComptePeres(PtSuppr : in Arbre) is --procédure incrémentant le compte de tous les noeuds pères du noeud pointé
 				PtCour : Arbre := PtSuppr;
 			begin
 				while PtCour.all.Pere /= Null loop
@@ -17,48 +17,44 @@ package body Struct is
 				end loop;
 			end;
 		begin
-			if a = null then
-				a := new noeud;
-				a.all.Compte := 1;
-				a.all.Fils(Gauche) := null;
-				a.all.Fils(Droite) := null;
-				a.all.C := e;
-				a.all.Pere := Mem;
-				IncrementerComptePeres(a);
+			if Ptracine = null then --on insère que dans ce cas, car tout noeud inséré sera forcément une feuille
+				Ptracine := new noeud;
+				Ptracine.all.Compte := 1;
+				Ptracine.all.Fils(Gauche) := null;
+				Ptracine.all.Fils(Droite) := null;
+				Ptracine.all.C := Clef;
+				Ptracine.all.Pere := Mem;
+				IncrementerComptePeres(Ptracine);
 			else
-				if e<a.all.C then
-					Inserermem(a.all.Fils(gauche),e, a);
-				elsif e>a.all.C then
-					Inserermem(a.all.Fils(droite),e, a);
-				end if;
+				if Clef<Ptracine.all.C then
+					Inserermem(Ptracine.all.Fils(gauche),Clef, Ptracine);
+				elsif Clef>Ptracine.all.C then
+					Inserermem(Ptracine.all.Fils(droite),Clef, Ptracine);
+				end if; --exclut le cas où on donne en argument une clef déjà présente, ainsi ce n'est pas une précondition
 			end if;
 		end;
 	begin
-		Inserermem(a,e,a);
+		Inserermem(Ptracine,Clef,Ptracine);
 	end;
 
-	function Rechercher (a : in Arbre ; e : Integer) return Arbre is
-		Pt : Arbre := a ;
+	function Rechercher (Ptracine : in Arbre ; Clef : Integer) return Arbre is
+		PtCour : Arbre := Ptracine ;
 	begin
-		while Pt /= null and then e /= Pt.all.C loop
-			if e < Pt.all.C then
-				Pt := Pt.all.Fils(Gauche);
+		while PtCour /= null and then Clef /= PtCour.all.C loop --on parcourt l'arbre depuis la racine, jusqu'à ce que l'on trouve le noeud cherché ou que l'on arrive à une feuille sans l'avoir trouvé
+			if Clef < PtCour.all.C then
+				PtCour := PtCour.all.Fils(Gauche); --structure des ABR
 			else
-				Pt := Pt.all.Fils(Droite);
+				PtCour := PtCour.all.Fils(Droite);
 			end if ;
 		end loop;
 
-		if Pt /= null then
-			return Pt;
-		else
-			return null;
-		end if;
+			return PtCour;
 	end;
 
-	procedure Supprimer(Ptracine : in out Arbre; e : Integer) is -- Il manque un cas dans suppr2
+	procedure Supprimer(Ptracine : in out Arbre; Clef : Integer) is -- Il manque un cas dans Suppr2
 		PtDel : Arbre ;
 
-		procedure suppr(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
+		procedure Suppr(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
 
 			procedure DecrementerComptePeres(PtSuppr : in Arbre) is
 				PtCour : Arbre := PtSuppr;
@@ -69,7 +65,7 @@ package body Struct is
 				end loop;
 			end;
 
-			procedure suppr0(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
+			procedure Suppr0(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
 			begin
 				DecrementerComptePeres(PtSuppr);
 				if PtSuppr.all.Pere = null then
@@ -83,7 +79,7 @@ package body Struct is
 				end if;
 			end;
 
-			procedure suppr1G(Ptracine : in out Arbre ; PtSuppr : in out Arbre) is
+			procedure Suppr1G(Ptracine : in out Arbre ; PtSuppr : in out Arbre) is
 				Pt, Mem : Arbre;
 			begin
 				DecrementerComptePeres(PtSuppr);
@@ -99,16 +95,19 @@ package body Struct is
 						PtSuppr.all.Pere.all.Fils(Droite) := PtSuppr.all.Fils(Gauche);
 					end if;
 
-					Pt := PtSuppr.all.Fils(Gauche);
+					Pt := PtSuppr.all.Fils(Gauche); --Ici, contrairement à Suppr1D, on ne libère pas le noeud supprimé, cela facilitera l'implémentation de la procédure
+				        				--Suppr2 où l'on supprime un noeud possédant deux fils, car on a choisi de remplacer l'élément supprimé par
+									--l'élement de clef directement inférieure, on utilise donc la procédure Suppr1G pour supprimer ce noeud, sans le perdre
+									--en mémoire
 					Pt.all.Pere := Mem;
 				end if;
 			end;
 
-			procedure suppr1D(Ptracine : in out Arbre ; PtSuppr : in out Arbre) is
+			procedure Suppr1D(Ptracine : in out Arbre ; PtSuppr : in out Arbre) is
 				Pt, Mem : Arbre;
 			begin
 				DecrementerComptePeres(PtSuppr);
-				if PtSuppr.all.Pere = null then
+				if PtSuppr.all.Pere = null then --PtSuppr et Ptracine pointent ici vers la même case mémoire
 					Ptracine := Ptracine.all.Fils(Droite);
 					Liberer(PtSuppr);
 				else
@@ -121,12 +120,12 @@ package body Struct is
 					end if;
 
 					Pt := PtSuppr.all.Fils(Droite);
-					Liberer(Pt.all.Pere);
+					Liberer(Pt.all.Pere); --Cf commentaire Suppr1G
 					Pt.all.Pere := Mem;
 				end if;
 			end;
 
-			procedure suppr2(Ptracine : in out Arbre ; PtSuppr : in Arbre) is
+			procedure Suppr2(Ptracine : in out Arbre ; PtSuppr : in Arbre) is
 
 				function RechercheMax (PtSuppr : in Arbre) return Arbre is
 					PtMax : Arbre := PtSuppr;
@@ -148,8 +147,8 @@ package body Struct is
 				DecrementerComptePeres(PtSuppr);
 				Max := RechercheMax(PtSuppr);
 
-				if PtSuppr.all.Pere = null then
-					Suppr1G(Ptracine, Max);
+				if PtSuppr.all.Pere = null then --PtSuppr et Ptracine pointent ici vers la même case mémoire
+					Suppr1G(Ptracine, Max); --Cf commentaire Suppr1G
 					Liberer(Ptracine);
 					Ptracine := Max ;
 					Max.all.Fils(Droite) := PtD;
@@ -159,23 +158,23 @@ package body Struct is
 				end if;
 			end;
 
-		begin
-			if PtSuppr.all.Fils(Gauche)=Null and PtSuppr.all.Fils(Droite)=Null then --Pas de fils
-				suppr0(Ptracine, PtSuppr);
-			elsif PtSuppr.all.Fils(Gauche) /= Null and PtSuppr.all.Fils(Droite) = Null then -- 1 fils gauche
-				suppr1G(Ptracine, PtSuppr);
-			elsif PtSuppr.all.Fils(Gauche) = Null and PtSuppr.all.Fils(Droite) /= Null then -- 1 fils droite
-				suppr1D(Ptracine, PtSuppr);
+		begin --Il faut considérer 4 cas différents (dont deux similaires)
+			if PtSuppr.all.Fils(Gauche)=Null and PtSuppr.all.Fils(Droite)=Null then		 --Aucun fils
+				Suppr0(Ptracine, PtSuppr);
+			elsif PtSuppr.all.Fils(Gauche) /= Null and PtSuppr.all.Fils(Droite) = Null then  -- 1 fils gauche
+				Suppr1G(Ptracine, PtSuppr);
+			elsif PtSuppr.all.Fils(Gauche) = Null and PtSuppr.all.Fils(Droite) /= Null then  -- 1 fils droite
+				Suppr1D(Ptracine, PtSuppr);
 			elsif PtSuppr.all.Fils(Gauche) /= Null and PtSuppr.all.Fils(Droite) /= Null then -- 2 fils
-				suppr2(Ptracine, PtSuppr);
+				Suppr2(Ptracine, PtSuppr);
 			end if ;
 		end;
 
 	begin
-		PtDel := rechercher(Ptracine,e);
+		PtDel := rechercher(Ptracine,Clef);
 
 		if PtDel = Null then
-			null;
+			null; --Rien à faire si l'élement à supprimer n'existe déjà pas
 		else
 			Suppr(Ptracine, PtDel);
 		end if;
@@ -200,17 +199,13 @@ package body Struct is
 					Mem := Pt;
 					Pt := Pt.all.Pere; 
 				end loop;
-
-				if not PereGaucheTrouve then
-					Pt := Null;
-				end if;
 			end if;
 
 			return Pt;
 		end;
 
-		function GrandVoisin(Cible : Arbre) return Arbre is
-			Pt : Arbre := Cible;
+		function GrandVoisin(Cible : Arbre) return Arbre is --Analogue à PetitVoisin, il suffit de permuter droite et gauche
+			Pt, Mem : Arbre := Cible;
 			PereDroiteTrouve : Boolean := False;
 		begin
 			if Cible.all.Fils(Droite) /= null then
@@ -220,9 +215,10 @@ package body Struct is
 				end loop;
 			else
 				While Pt /= Null and not PereDroiteTrouve loop
-					if Pt.all.Pere.all.C > Pt.all.C then
+					if Pt.all.Fils(Gauche) /= Null and then Pt.all.Fils(Gauche).all.C = Mem.all.C then
 						PereDroiteTrouve := True;
 					end if;
+					Mem := Pt;
 					Pt := Pt.all.Pere;
 				end loop;
 			end if;

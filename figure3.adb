@@ -32,7 +32,7 @@ begin
 	Put("On obtient pour Noeuds_Voisins de 2 : ");Put(Petit2.C);Put(Grand2.C);
 	New_Line;
 	Noeuds_Voisins(c,Petit1,Grand1);
-	Put("On obtient pour Noeuds_Voisins de 1 : ");Put("Null ");Put(Grand1.C);
+	Put("On obtient pour Noeuds_Voisins de 1 :  ");Put("   Null ");Put(Grand1.C);
 	New_Line; New_Line;
 
 
