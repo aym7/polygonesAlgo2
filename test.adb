@@ -5,7 +5,7 @@ use struct;
 use Ada.Text_IO; 
 use Ada.Integer_Text_IO;
 
-procedure main is
+procedure test is
 	a : arbre; b:arbre; petit : arbre; grand : arbre;
 begin
 	Put("Ordre voulu : 1 2 3 4 5 6 7 2");

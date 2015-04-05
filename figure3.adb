@@ -21,6 +21,7 @@ begin
 	d:=Rechercher(a,6);
 
 
+	Put_Line("Les comptes de 5, 2, 1, et 6 sont : ");
 	Put(a.Compte);New_Line;Put(b.Compte);New_Line;Put(c.Compte);Put(d.Compte);
 
 
@@ -36,7 +37,7 @@ begin
 	New_Line;
 	Noeuds_Voisins(c,Petit6,Grand6);
 	Put("On obtient pour Noeuds_Voisins de 6 :  ");Put(Petit6.C);Put("      Null");
-	New_Line;
+	New_Line;New_Line;
 
 	Compte_Position(a,NbPetits5,NbGrands5);
 	Compte_Position(b,NbPetits2,NbGrands2);
