@@ -4,8 +4,14 @@ with Ada.Text_IO;
 use Ada.Text_IO; 
 use Ada.Integer_Text_IO;
 
-procedure test is
-    package abr is new struct(integer);
+-- TEST des fonctions de l'arbre avec des integer
+procedure testArbre is
+    function "<"(Comp1, Comp2 : integer) return boolean is
+    begin
+	return Comp1 <= Comp2;
+    end;
+
+    package abr is new struct(integer, "<");
     use abr;
 
 	a : arbre; b:arbre; petit : arbre; grand : arbre;

@@ -10,6 +10,6 @@ package Polygone is
 
     function pointAvant(p1, p2 : Point) return boolean;
     function nbSeg (indP : integer; commencant : boolean; tabP : TableauPoints) return natural;
-    procedure traitementPoint(indP : integer; a : arbre; tabP : TableauPoints);
-    procedure traitement(abr : arbre; tabP : TableauPoints);
+    procedure traitementPoint(indP : integer; tree : in out arbre; tabP : TableauPoints);
+    procedure traitement(tabP : TableauPoints);
 end Polygone;

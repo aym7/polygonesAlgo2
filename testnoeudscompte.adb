@@ -1,11 +1,20 @@
 with struct;
+with geometry; use geometry;
 with Ada.Integer_Text_IO;
 with Ada.Text_IO; 
 use Ada.Text_IO; 
 use Ada.Integer_Text_IO;
 
-procedure figure3 is
-    package abr is new struct(integer);
+-- TEST des fonctions noeuds_voisins et compte_position avec des integer
+-- l'exemple utilisé est le meme que celui du sujet afin de 
+-- pouvoir vérifier les résultats
+procedure testNoeudsCompte is
+    function "<"(Comp1, Comp2 : integer) return boolean is
+    begin
+	return Comp1 <= Comp2;
+    end;
+
+    package abr is new struct(integer, "<");
     use abr;
 
 	a, b, c, d, Petit5, Grand5, Petit2, Grand2, Petit1, Grand1, Petit6, Grand6 : Arbre;
