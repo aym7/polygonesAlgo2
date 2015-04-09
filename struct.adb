@@ -2,11 +2,16 @@ With Ada.Unchecked_Deallocation ;
 
 package body Struct is
 
+	function "<"(Comp1,Comp2 : Type_Clef) return Boolean is
+	begin
+		return true;
+	end;
+
 	procedure Liberer is new Ada.Unchecked_Deallocation(Noeud,Arbre) ;
 
-	procedure Inserer(Ptracine : in out Arbre ; Clef : Integer) is --Ptracine est en out au cas où c'est le pointeur null
+	procedure Inserer(Ptracine : in out Arbre ; Clef : Type_Clef) is --Ptracine est en out au cas où c'est le pointeur null
 
-		procedure Inserermem (Ptracine : in out Arbre ; Clef : Integer ; Mem : Arbre) is --Besoin de garder le père en mémoire pour le pointeur pere du noeud inséré
+		procedure Inserermem (Ptracine : in out Arbre ; Clef : Type_Clef ; Mem : Arbre) is --Besoin de garder le père en mémoire pour le pointeur pere du noeud inséré
 
 			procedure IncrementerComptePeres(PtSuppr : in Arbre) is --procédure incrémentant le compte de tous les noeuds pères du noeud pointé
 				PtCour : Arbre := PtSuppr;
@@ -28,7 +33,7 @@ package body Struct is
 			else
 				if Clef<Ptracine.all.C then
 					Inserermem(Ptracine.all.Fils(gauche),Clef, Ptracine);
-				elsif Clef>Ptracine.all.C then
+				elsif Ptracine.all.C<Clef then
 					Inserermem(Ptracine.all.Fils(droite),Clef, Ptracine);
 				end if; --exclut le cas où on donne en argument une clef déjà présente, ainsi ce n'est pas une précondition
 			end if;
@@ -37,7 +42,7 @@ package body Struct is
 		Inserermem(Ptracine,Clef,Ptracine);
 	end;
 
-	function Rechercher (Ptracine : in Arbre ; Clef : Integer) return Arbre is
+	function Rechercher (Ptracine : in Arbre ; Clef : Type_Clef) return Arbre is
 		PtCour : Arbre := Ptracine ;
 	begin
 		while PtCour /= null and then Clef /= PtCour.all.C loop --on parcourt l'arbre depuis la racine, jusqu'à ce que l'on trouve le noeud cherché ou que l'on arrive à une feuille sans l'avoir trouvé
@@ -48,10 +53,10 @@ package body Struct is
 			end if ;
 		end loop;
 
-			return PtCour;
+		return PtCour;
 	end;
 
-	procedure Supprimer(Ptracine : in out Arbre; Clef : Integer) is -- Il manque un cas dans Suppr2
+	procedure Supprimer(Ptracine : in out Arbre; Clef : Type_Clef) is -- Il manque un cas dans Suppr2
 		PtDel : Arbre ;
 
 		procedure Suppr(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
@@ -71,7 +76,7 @@ package body Struct is
 				if PtSuppr.all.Pere = null then
 					Liberer(PtSuppr); --PtSuppr et Ptracine pointent ici vers la même case mémoire
 				else
-					if PtSuppr.all.Pere.all.C > PtSuppr.all.C then
+					if PtSuppr.all.C < PtSuppr.all.Pere.all.C then
 						PtSuppr.all.Pere.all.Fils(Gauche) := null;
 					else
 						PtSuppr.all.Pere.all.Fils(Droite) := null;
@@ -89,16 +94,16 @@ package body Struct is
 				else
 					Mem := PtSuppr.all.Pere;
 
-					if PtSuppr.all.Pere.all.C > PtSuppr.all.C then
+					if PtSuppr.all.C < PtSuppr.all.Pere.all.C then
 						PtSuppr.all.Pere.all.Fils(Gauche) := PtSuppr.all.Fils(Gauche);
 					else
 						PtSuppr.all.Pere.all.Fils(Droite) := PtSuppr.all.Fils(Gauche);
 					end if;
 
 					Pt := PtSuppr.all.Fils(Gauche); --Ici, contrairement à Suppr1D, on ne libère pas le noeud supprimé, cela facilitera l'implémentation de la procédure
-				        				--Suppr2 où l'on supprime un noeud possédant deux fils, car on a choisi de remplacer l'élément supprimé par
-									--l'élement de clef directement inférieure, on utilise donc la procédure Suppr1G pour supprimer ce noeud, sans le perdre
-									--en mémoire
+					--Suppr2 où l'on supprime un noeud possédant deux fils, car on a choisi de remplacer l'élément supprimé par
+					--l'élement de clef directement inférieure, on utilise donc la procédure Suppr1G pour supprimer ce noeud, sans le perdre
+					--en mémoire
 					Pt.all.Pere := Mem;
 				end if;
 			end;
@@ -113,7 +118,7 @@ package body Struct is
 				else
 					Mem := PtSuppr.all.Pere;
 
-					if PtSuppr.all.Pere.all.C > PtSuppr.all.C then
+					if PtSuppr.all.C < PtSuppr.all.Pere.all.C then
 						PtSuppr.all.Pere.all.Fils(Gauche) := PtSuppr.all.Fils(Gauche);
 					else
 						PtSuppr.all.Pere.all.Fils(Droite) := PtSuppr.all.Fils(Gauche);

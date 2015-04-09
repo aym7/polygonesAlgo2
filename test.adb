@@ -1,13 +1,16 @@
 with struct;
 with Ada.Integer_Text_IO;
-with Ada.Text_IO; 
-use struct; 
+with Ada.Text_IO;  
 use Ada.Text_IO; 
 use Ada.Integer_Text_IO;
 
 procedure test is
+    package abr is new struct(integer);
+    use abr;
+
 	a : arbre; b:arbre; petit : arbre; grand : arbre;
 begin
+
 	Put("Ordre voulu : 1 2 3 4 5 6 7 2");
 	a := new noeud;
 	a.C := 8;

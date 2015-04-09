@@ -1,11 +1,13 @@
 with struct;
 with Ada.Integer_Text_IO;
 with Ada.Text_IO; 
-use struct; 
 use Ada.Text_IO; 
 use Ada.Integer_Text_IO;
 
 procedure figure3 is
+    package abr is new struct(integer);
+    use abr;
+
 	a, b, c, d, Petit5, Grand5, Petit2, Grand2, Petit1, Grand1, Petit6, Grand6 : Arbre;
 	NbPetits5, NbGrands5, NbPetits2, NbGrands2, NbPetits1, NbGrands1, NbPetits6, NbGrands6 : Natural;
 begin
