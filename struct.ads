@@ -4,17 +4,6 @@ type Type_Clef is private;
 package struct is
 
     function "<"(Comp1,Comp2 : Type_Clef) return Boolean;
-    type Point is record
-        X : Float;
-        Y : Float;
-    end record;
-
-    type Segment is record
-        P1 : Point;
-        P2 : Point;
-    end record;
-
-    type TableauPoints is array(Integer range <>) of Point;
 
     type Noeud ;
     type Arbre is access Noeud ;
