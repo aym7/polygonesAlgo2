@@ -2,11 +2,6 @@ With Ada.Unchecked_Deallocation ;
 
 package body Struct is
 
-	function "<"(Comp1,Comp2 : Type_Clef) return Boolean is
-	begin
-		return true;
-	end;
-
 	procedure Liberer is new Ada.Unchecked_Deallocation(Noeud,Arbre) ;
 
 	procedure Inserer(Ptracine : in out Arbre ; Clef : Type_Clef) is --Ptracine est en out au cas où c'est le pointeur null

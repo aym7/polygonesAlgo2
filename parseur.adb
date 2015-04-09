@@ -14,7 +14,7 @@ begin
 end;
 
     --parcoure le fichier et récupère les données sur les points
-procedure lecture (filename : in String; Sommets : in out TableauPoints) is 
+procedure lecture (filename : in String; nbP : natural; Sommets : in out TableauPoints) is 
 begin
     for i in Sommets'Range loop
         Get(file, Sommets(i).X);

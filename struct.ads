@@ -1,9 +1,9 @@
 generic
 type Type_Clef is private;
+with function "<"(Comp1,Comp2 : Type_Clef) return Boolean;
 
 package struct is
 
-    function "<"(Comp1,Comp2 : Type_Clef) return Boolean;
 
     type Noeud ;
     type Arbre is access Noeud ;
