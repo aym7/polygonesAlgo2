@@ -2,6 +2,7 @@ with Struct;
 with Geometry; use Geometry;
 with Svg;
 with ada.text_io; use ada.text_io;
+
 package body Polygone is
 
     function "<"(Comp1, Comp2 : integer) return boolean is
@@ -9,6 +10,18 @@ package body Polygone is
 	return Comp1 <= Comp2;
     end;
 
+    -- testée OK
+    function "<"(Comp1,Comp2 : Segment) return boolean is
+	height1, height2 : float;
+    begin
+	height1 := (comp1.P1.y + comp1.P2.y) / 2.0;
+	height2 := (comp2.P1.y + comp2.P2.y) / 2.0;
+
+	return height1 < height2;
+    end;
+
+
+    -- testée, OK
     -- retourne vrai si p1 avant (lexicographiquemement parlant) p2
     -- on s'en sert pour savoir si un segment commence ou non par un point
     function pointAvant(p1, p2 : Point) return boolean is
@@ -60,49 +73,50 @@ package body Polygone is
 
 
     -- traitement d'un point
-    procedure traitementPoint (p : point; a : arbre; tabP : TableauPoints) is
-	--       r : boolean := false;
-	--	n : arbre := a; -- CAREFUL : can be a problem (pointer)
-	--       s : segment;
-	--       vPetit, vGrand : arbre;
-	--       cPetit, cGrand : natural;
+    procedure traitementPoint (indP : integer; a : arbre; tabP : TableauPoints) is
+--r : boolean := false;
+--n : arbre := a; -- CAREFUL : can be a problem (pointer)
+--s : segment;
+--vPetit, vGrand : arbre;
+--cPetit, cGrand : natural;
+--p : Point := tabP(indP);
     begin
 	null;
 
-	--       if nbSeg(p, true) = 2 then
-	--           r := true;
-	--           s := Segment'(p, p);
-	--           Inserer(n, s);
-	--           Noeuds_Voisins(n, vPetit, vGrand);
-	--           Supprimer(a, n);
-	--       end if;
-	--       
+--if nbSeg(indP, true, tabP) = 2 then
+--    r := true;
+--    s := Segment'(p, p);
+--    Inserer(n, s);
+--    Noeuds_Voisins(n, vPetit, vGrand);
+--    Supprimer(a, n);
+--end if;
 
-	--       if nbSeg(p, false) = 2 then
-	--           r := true;
-	--           s := Segment'(p, p);
-	--           Inserer(n, s);
-	--           Noeuds_Voisins(n, vPetit, vGrand);
-	--           Supprimer(a, n);
-	--       end if;
 
-	-- si on a un point de rebroussement, cela signifie qu'on peut
-	-- tracer une droite en svg
-	--       if r then
-	--           if (cPetit mod 2) = 1 or (cGrand mod 2) = 1 then
-	--		    put("toto");
-	--               -- trace droite
-	-- récupération points pour reconnecter
-	-- declare
-	-- -- solution temporaire en attendant de trouver la méthode pour récupérer les points
-	-- p1, p2 : Point; 
-	-- begin
-	-- p1 := Point'(p.x, 0.0);
-	-- p2 := Point'(p.x, 50.0);
-	--svg.svg_line(p1, p2, Svg.Color'first);
-	--end;
-	--           end if;
-	--       end if;
+--if nbSeg(indP, false, tabP) = 2 then
+--    r := true;
+--    s := Segment'(p, p);
+--    Inserer(n, s);
+--    Noeuds_Voisins(n, vPetit, vGrand);
+--    Supprimer(a, n);
+--end if;
+
+---- si on a un point de rebroussement, cela signifie qu'on peut
+---- tracer une droite en svg
+--if r then
+--    if (cPetit mod 2) = 1 or (cGrand mod 2) = 1 then
+--	put("toto");
+--	-- trace droite
+--	-- récupération points pour reconnecter
+--	declare
+--	    --   solution temporaire en attendant de trouver la méthode pour récupérer les points
+--	    p1, p2 : Point; 
+--	begin
+--	    p1 := Point'(p.x, 0.0);
+--	    p2 := Point'(p.x, 50.0);
+--	    svg.svg_line(p1, p2, Svg.Color'first);
+--	end;
+--    end if;
+--end if;
     end traitementPoint ;
 
 
@@ -111,7 +125,7 @@ package body Polygone is
     procedure traitement (abr : Arbre; tabP : TableauPoints) is
     begin
 	for i in tabP'Range loop
-	    traitementPoint(tabP(i), abr, tabP);
+	    traitementPoint(i, abr, tabP);
 	end loop;
 
     end traitement;
