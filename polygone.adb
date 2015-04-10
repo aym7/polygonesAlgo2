@@ -83,58 +83,63 @@ package body Polygone is
 	p : Point := tabP(indP);
     begin
 
-	-- si le point est un point de rebroussement 'initial'
-	if nbSeg(indP, true, tabP) = 2 then
-	    isRebroussement := true;
-	    seg := Segment'(p, p);
-	    Inserer(tree , seg );
-	    n := Rechercher(tree , seg );
-	    Noeuds_Voisins(n, vPetit, vGrand);
-	    Compte_Position(n, cPetit, cGrand);
-	    Supprimer(tree , seg );
-	end if;
-
-
-	-- si le point est un point de rebroussement 'terminal'
-	if nbSeg(indP, false, tabP) = 2 then
-	    isRebroussement := true;
-	    seg := Segment'(p, p);
-	    Inserer(tree , seg );
-	    n := Rechercher(tree , seg);
-	    Noeuds_Voisins(n, vPetit, vGrand);
-	    Compte_Position(n, cPetit, cGrand);
-	    Supprimer(tree , seg );
-	end if;
-
-	-- si on a un point de rebroussement...
-	if isRebroussement then
-	    -- ... et que le polygone n'est pas monotone...
-	    if (cPetit mod 2) = 1 or (cGrand mod 2) = 1 then
-		-- trace droite
-		-- récupération points pour reconnecter
-		declare
-		    -- temporary
-		    p1, p2 : Point; 
-		begin
-		    p1 := Point'(p.x, 0.0);
-		    p2 := Point'(p.x, 50.0);
-		    svg.svg_line(p1, p2, Svg.Color'first);
-		end;
+	    -- si le point est un point de rebroussement 'initial'
+	    if nbSeg(indP, true, tabP) = 2 then
+		    isRebroussement := true;
+		    seg := Segment'(p, p);
+		    Inserer(tree , seg );
+		    n := Rechercher(tree , seg );
+		    Noeuds_Voisins(n, vPetit, vGrand);
+		    Compte_Position(n, cPetit, cGrand);
+		    Supprimer(tree , seg );
+		    Put_Line("Point de rebroussement initial");
 	    end if;
-	end if;
+
+
+	    -- Enlever;
+	    -- Ajouter;
+
+
+	    -- si le point est un point de rebroussement 'terminal'
+	    if nbSeg(indP, false, tabP) = 2 then
+		    isRebroussement := true;
+		    seg := Segment'(p, p);
+		    Inserer(tree , seg );
+		    n := Rechercher(tree , seg);
+		    Noeuds_Voisins(n, vPetit, vGrand);
+		    Compte_Position(n, cPetit, cGrand);
+		    Supprimer(tree , seg );
+		    Put_Line("Point de rebroussement terminal");
+	    end if;
+
+	    -- si on a un point de rebroussement...
+	    if isRebroussement then
+		    -- ... et que le polygone n'est pas monotone...
+		    if (cPetit mod 2) = 1 or (cGrand mod 2) = 1 then
+			    -- trace droite
+			    -- récupération points pour reconnecter
+			    put_line("Segment trouvé ! ");
+			    declare
+				    -- temporary
+				    p1, p2 : Point; 
+			    begin
+				    p1 := Point'(p.x, 0.0);
+				    p2 := Point'(p.x, 50.0);
+				    svg.svg_line(p1, p2, Svg.Red);
+			    end;
+		    end if;
+	    end if;
     end traitementPoint ;
 
-
-
     -- main treatment
-    -- ERROR : bug in the loop
     procedure traitement (tabP : TableauPoints) is
-	abr : Arbre := null;
+	    abr : Arbre := null;
     begin
-	-- la "droite" se déplace de point en point
-	for i in tabP'Range loop
-	    traitementPoint(i, abr, tabP);
-	end loop;
+	    -- la "droite" se déplace de point en point
+	    for i in tabP'Range loop
+		    put(integer'image(i));
+		    traitementPoint(i, abr, tabP);
+	    end loop;
     end traitement;
 
 end Polygone;

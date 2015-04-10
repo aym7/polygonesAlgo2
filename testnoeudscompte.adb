@@ -6,8 +6,7 @@ use Ada.Text_IO;
 use Ada.Integer_Text_IO;
 
 -- TEST des fonctions noeuds_voisins et compte_position avec des integer
--- l'exemple utilisé est le meme que celui du sujet afin de 
--- pouvoir vérifier les résultats
+-- l'exemple utilisé est le meme que celui du sujet
 procedure testNoeudsCompte is
     function "<"(Comp1, Comp2 : integer) return boolean is
     begin

@@ -1,6 +1,7 @@
 with Polygone; use Polygone;
 with geometry; use geometry;
 with ada.text_io; use ada.text_io;
+
 procedure TestPolygone is
     procedure testPointAvant is
 	p1, p2 : Point;
