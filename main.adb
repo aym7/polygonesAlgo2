@@ -9,7 +9,7 @@ with ada.text_io; use ada.text_io;
 
 procedure Main is
 	nbPoints : natural;
-	ABRStockSegments : polygone.abr.arbre;
+	--ABRStockSegments : polygone.abr.arbre;
 begin
 	if Argument_Count /= 2 then
 		Put_Line(Standard_Error, "utilisation : main src.in polygone.svg");

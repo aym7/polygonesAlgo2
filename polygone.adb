@@ -92,7 +92,7 @@ package body Polygone is
 		    Noeuds_Voisins(n, vPetit, vGrand);
 		    Compte_Position(n, cPetit, cGrand);
 		    Supprimer(tree , seg );
-		    Put_Line("Point de rebroussement initial");
+		    --Put_Line("Point de rebroussement initial");
 	    end if;
 
 
@@ -109,7 +109,7 @@ package body Polygone is
 		    Noeuds_Voisins(n, vPetit, vGrand);
 		    Compte_Position(n, cPetit, cGrand);
 		    Supprimer(tree , seg );
-		    Put_Line("Point de rebroussement terminal");
+		    --Put_Line("Point de rebroussement terminal");
 	    end if;
 
 	    -- si on a un point de rebroussement...
@@ -137,7 +137,6 @@ package body Polygone is
     begin
 	    -- la "droite" se déplace de point en point
 	    for i in tabP'Range loop
-		    put(integer'image(i));
 		    traitementPoint(i, abr, tabP);
 	    end loop;
     end traitement;
