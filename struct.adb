@@ -38,7 +38,7 @@ package body Struct is
 				elsif Ptracine.all.C < Clef then 
 					Put(" Droite ");
 					Inserermem(Ptracine.all.Fils(droite),Clef, Ptracine);
-				end if; --exclut le cas où on donne en argument une clef déjà présente, ainsi ce n'est pas une précondition
+				end if; --exclut le cas où on donne en argument une clef déjà présente, ainsi ce n'est pas une précondition, il n'y a juste rien à faire dans ce cas
 			end if;
 		end;
 	begin
@@ -59,7 +59,7 @@ package body Struct is
 		return PtCour;
 	end;
 
-	procedure Supprimer(Ptracine : in out Arbre; Clef : Type_Clef) is -- Il manque un cas dans Suppr2
+	procedure Supprimer(Ptracine : in out Arbre; Clef : Type_Clef) is
 		PtDel : Arbre ;
 
 		procedure Suppr(Ptracine : in out Arbre; PtSuppr : in out Arbre) is
@@ -79,7 +79,7 @@ package body Struct is
 				DecrementerComptePeres(PtSuppr);
 				if PtSuppr.all.Pere = null then
 					Liberer(PtSuppr); --PtSuppr et Ptracine pointent ici vers la même case mémoire
-					Ptracine := null;
+					Ptracine := null; --On a supprimé la racine qui n'avait pas de fils, il n'y a plus d'arbre
 				else
 					if PtSuppr.all.C < PtSuppr.all.Pere.all.C then
 						PtSuppr.all.Pere.all.Fils(Gauche) := null;
@@ -218,7 +218,7 @@ package body Struct is
 				end loop;
 			else
 				While Pt.all.Pere /= Null and not PereGaucheTrouve loop
-					if Pt.all.Pere.all.Fils(Droite) /= Null and then Pt.all.Pere.all.Fils(Droite).all.C = Mem.all.C then
+					if Pt.all.Pere.all.Fils(Droite) /= Null and then Pt.all.Pere.all.Fils(Droite).all.C = Mem.all.C then --si on trouve un père dont le noeud courant est le fils gauche
 						PereGaucheTrouve := True;
 					end if;
 					Mem := Pt;
@@ -240,7 +240,7 @@ package body Struct is
 				end loop;
 			else
 				While Pt.all.Pere /= Null and not PereDroiteTrouve loop
-					if Pt.all.Pere.all.Fils(Gauche) /= Null and then Pt.all.Pere.all.Fils(Gauche).all.C = Mem.all.C then
+					if Pt.all.Pere.all.Fils(Gauche) /= Null and then Pt.all.Pere.all.Fils(Gauche).all.C = Mem.all.C then --si on trouve un père dont le noeud courant est le fils droit
 						PereDroiteTrouve := True;
 					end if;
 					Mem := Pt;
@@ -267,8 +267,9 @@ package body Struct is
 			end if;
 
 			While PtCour.all.Pere /= Null loop
-				if PtCour.all.Pere.all.Fils(Droite) /= Null and then PtCour.all.Pere.all.Fils(Droite) = PtCour then
-					Compteur := Compteur + PtCour.all.Pere.all.Compte - PtCour.all.Compte;
+				if PtCour.all.Pere.all.Fils(Droite) /= Null and then PtCour.all.Pere.all.Fils(Droite) = PtCour then --si on trouve un père gauche
+					Compteur := Compteur + PtCour.all.Pere.all.Compte - PtCour.all.Compte; --on ajoute le compte du père, on soustrait le compte du noeud courant.
+													       --cela revient à ajouter le nombre de noeuds du sous-arbre gauche + 1 pour le père
 				end if;
 				PtCour := PtCour.all.Pere;
 			end loop;
@@ -285,8 +286,9 @@ package body Struct is
 			end if;
 
 			While PtCour.all.Pere /= Null loop
-				if PtCour.all.Pere.all.Fils(Gauche) /= Null and then PtCour.all.Pere.all.Fils(Gauche) = PtCour then
-					Compteur := Compteur + PtCour.all.Pere.all.Compte - PtCour.all.Compte;
+				if PtCour.all.Pere.all.Fils(Gauche) /= Null and then PtCour.all.Pere.all.Fils(Gauche) = PtCour then --si on trouve un père droit
+					Compteur := Compteur + PtCour.all.Pere.all.Compte - PtCour.all.Compte; --on ajoute le compte du père, on soustrait le compte du noeud courant.
+													       --cela revient à ajouter le nombre de noeuds du sous-arbre droit + 1 pour le père
 				end if;
 				PtCour := PtCour.all.Pere;
 			end loop;

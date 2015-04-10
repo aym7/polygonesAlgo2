@@ -21,6 +21,7 @@ package body Svg is
         Put_Line(";stroke-width:0.2""/>");
     end Svg_Line;
 
+    --trace le polygone à partir des points du tableau
     procedure drawPolygone(tabP : TableauPoints) is
     begin
         Put(file, "<polygon fill=""blue"" points="""); 
@@ -29,7 +30,6 @@ package body Svg is
         end loop;
 
         put_line(file, """/>");
-        null;
     end;
 
     procedure Svg_Header(filename : in string; Width, Height : Integer) is
